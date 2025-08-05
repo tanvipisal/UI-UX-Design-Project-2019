@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Time Logger Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1><i class="fas fa-clock"></i> Office Time Logger</h1>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard-main">
+            <!-- Status Card -->
+            <div class="status-card">
+                <div class="status-info">
+                    <h2>Current Status</h2>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text" id="statusText">Clocked Out</span>
+                    </div>
+                    <div class="current-session" id="currentSession">
+                        <span>Session Time: <strong id="sessionTime">00:00:00</strong></span>
+                    </div>
+                </div>
+                <div class="clock-actions">
+                    <button class="btn btn-primary" id="clockInBtn">
+                        <i class="fas fa-play"></i> Clock In
+                    </button>
+                    <button class="btn btn-secondary" id="clockOutBtn" disabled>
+                        <i class="fas fa-stop"></i> Clock Out
+                    </button>
+                    <button class="btn btn-warning" id="breakBtn" disabled>
+                        <i class="fas fa-coffee"></i> Break
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Today's Total</h3>
+                        <span class="stat-value" id="todayTotal">00:00:00</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>This Week</h3>
+                        <span class="stat-value" id="weekTotal">00:00:00</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Break Time</h3>
+                        <span class="stat-value" id="breakTime">00:00:00</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-target"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Goal Progress</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goalProgress"></div>
+                        </div>
+                        <span class="stat-value" id="goalPercentage">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item placeholder">
+                        <i class="fas fa-info-circle"></i>
+                        <span>No activity yet. Clock in to start tracking!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Summary -->
+            <div class="weekly-summary">
+                <h3><i class="fas fa-chart-bar"></i> Weekly Summary</h3>
+                <div class="week-days">
+                    <div class="day-card" data-day="monday">
+                        <span class="day-name">Mon</span>
+                        <span class="day-hours" id="mondayHours">0h</span>
+                        <div class="day-bar">
+                            <div class="day-progress" id="mondayProgress"></div>
+                        </div>
+                    </div>
+                    <div class="day-card" data-day="tuesday">
+                        <span class="day-name">Tue</span>
+                        <span class="day-hours" id="tuesdayHours">0h</span>
+                        <div class="day-bar">
+                            <div class="day-progress" id="tuesdayProgress"></div>
+                        </div>
+                    </div>
+                    <div class="day-card" data-day="wednesday">
+                        <span class="day-name">Wed</span>
+                        <span class="day-hours" id="wednesdayHours">0h</span>
+                        <div class="day-bar">
+                            <div class="day-progress" id="wednesdayProgress"></div>
+                        </div>
+                    </div>
+                    <div class="day-card" data-day="thursday">
+                        <span class="day-name">Thu</span>
+                        <span class="day-hours" id="thursdayHours">0h</span>
+                        <div class="day-bar">
+                            <div class="day-progress" id="thursdayProgress"></div>
+                        </div>
+                    </div>
+                    <div class="day-card" data-day="friday">
+                        <span class="day-name">Fri</span>
+                        <span class="day-hours" id="fridayHours">0h</span>
+                        <div class="day-bar">
+                            <div class="day-progress" id="fridayProgress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Settings</h3>
+                    <button class="close-btn" id="closeSettings">&times;</button>
+                </div>
+                <div class="modal-content">
+                    <div class="setting-group">
+                        <label>Daily Goal (hours):</label>
+                        <input type="number" id="dailyGoal" min="1" max="12" value="8">
+                    </div>
+                    <div class="setting-group">
+                        <label>Work Schedule:</label>
+                        <select id="workSchedule">
+                            <option value="9-5">9 AM - 5 PM</option>
+                            <option value="8-4">8 AM - 4 PM</option>
+                            <option value="10-6">10 AM - 6 PM</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="saveSettings">Save Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Button -->
+        <button class="settings-btn" id="settingsBtn">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
